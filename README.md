@@ -1,2 +1,3 @@
-# huey-prometheus-exporter
-expose metrics from the huey task queue
+# prometheus-nats-exporter
+
+Expose metrics from the huey task queue

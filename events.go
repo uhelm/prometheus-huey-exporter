@@ -1,4 +1,4 @@
-package main
+package exporter
 
 import (
 	"context"
@@ -6,9 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
+	"golang.org/x/exp/slog"
 )
 
 type EventListener interface {
@@ -18,17 +17,17 @@ type EventListener interface {
 type listener struct {
 	rdb               *redis.Client
 	channel           string
-	logger            log.Logger
-	m                 *metrics
+	logger            *slog.Logger
+	m                 *Metrics
 	startExecutionMap map[string]time.Time
 }
 
-func NewEventListener(rdb *redis.Client, channel string, logger log.Logger, m *metrics) EventListener {
+func NewEventListener(rdb *redis.Client, channel string, logger *slog.Logger, metrics *Metrics) EventListener {
 	return &listener{
 		rdb:               rdb,
 		channel:           channel,
 		logger:            logger,
-		m:                 m,
+		m:                 metrics,
 		startExecutionMap: make(map[string]time.Time),
 	}
 }
@@ -46,7 +45,7 @@ func (l *listener) Run(ctx context.Context) error {
 		select {
 		case evt := <-ch:
 			if err = l.handleEvent(evt); err != nil {
-				level.Error(l.logger).Log("during", "handleEvent", "err", err)
+				l.logger.Error("running handleEvent()", "err", err)
 			}
 		case <-ctx.Done():
 			return nil
@@ -60,41 +59,40 @@ func (l *listener) handleEvent(msg *redis.Message) error {
 		return err
 	}
 
+	l.logger.Debug(fmt.Sprintf("event: %+v", evt))
+
 	switch evt.Event {
-	case SIGNAL_EXECUTING:
-		l.m.executions.WithLabelValues(evt.TaskName).Inc()
+	case Executing:
+		l.m.Executions.WithLabelValues(evt.TaskName).Inc()
 		l.startExecutionMap[evt.TaskId] = time.Now()
 
-	case SIGNAL_COMPLETE, SIGNAL_ERROR:
-		labelValues := []string{evt.TaskName, fmt.Sprint(evt.Event == SIGNAL_COMPLETE)}
-		l.m.completed.WithLabelValues(labelValues...).Inc()
+	case Complete, Error:
+		labelValues := []string{evt.TaskName, fmt.Sprint(evt.Event == Complete)}
+		l.m.Completed.WithLabelValues(labelValues...).Inc()
 		if startTime, ok := l.startExecutionMap[evt.TaskId]; ok {
-			l.m.duration.WithLabelValues(labelValues...).Observe(time.Since(startTime).Seconds())
+			l.m.Duration.WithLabelValues(labelValues...).Observe(time.Since(startTime).Seconds())
 			delete(l.startExecutionMap, evt.TaskId)
 		}
 
-	case SIGNAL_LOCKED:
-		l.m.locked.WithLabelValues(evt.TaskName).Inc()
+	case Locked:
+		l.m.Locked.WithLabelValues(evt.TaskName).Inc()
 	}
-
-	level.Info(l.logger).Log("map", fmt.Sprintf("%+v", l.startExecutionMap))
-
 	return nil
 }
 
 type eventType string
 
 const (
-	SIGNAL_CANCELED    eventType = "canceled"
-	SIGNAL_COMPLETE    eventType = "complete"
-	SIGNAL_ERROR       eventType = "error"
-	SIGNAL_EXECUTING   eventType = "executing"
-	SIGNAL_EXPIRED     eventType = "expired"
-	SIGNAL_LOCKED      eventType = "locked"
-	SIGNAL_RETRYING    eventType = "retrying"
-	SIGNAL_REVOKED     eventType = "revoked"
-	SIGNAL_SCHEDULED   eventType = "scheduled"
-	SIGNAL_INTERRUPTED eventType = "interrupted"
+	Canceled    eventType = "canceled"
+	Complete    eventType = "complete"
+	Error       eventType = "error"
+	Executing   eventType = "executing"
+	Expired     eventType = "expired"
+	Locked      eventType = "locked"
+	Retrying    eventType = "retrying"
+	Revoked     eventType = "revoked"
+	Scheduled   eventType = "scheduled"
+	Interrupted eventType = "interrupted"
 )
 
 type event struct {
