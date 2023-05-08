@@ -41,7 +41,8 @@ func main() {
 
 	var (
 		metrics       = exporter.SetupMetrics(opts.MetricsPrefix)
-		eventListener = exporter.NewEventListener(rc, opts.RedisChannel, logger.With("component", "event-listener"), metrics)
+		eventHandler  = exporter.NewEventHandler(metrics, logger)
+		eventListener = exporter.NewEventListener(rc, opts.RedisChannel, logger.With("component", "event-listener"), eventHandler)
 		httpHandler   = exporter.MakeHTTPHandler(opts.MetricsPath)
 	)
 
