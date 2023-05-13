@@ -15,12 +15,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.1.2] - 2023-05-13
+
+### Fixed
+
+- correct name in README file
+  
 ## [0.1.1] - 2023-05-13
 
 ### Added
 
 - GitHub Actions
-- 
+  
 ## [0.1.0] - 2023-05-05
 
 ### Added
