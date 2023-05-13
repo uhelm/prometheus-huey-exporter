@@ -40,3 +40,17 @@ changelog:
       order: 1
     - title: Others
       order: 999
+release:
+  mode: keep-existing
+  header: |
+    ## Some title ({{ .Date }})
+
+    Welcome to this new release!
+
+  # Footer for the release body.
+  #
+  # Templates: allowed
+  footer: |
+    ## Thanks!
+
+    Those were the changes on {{ .Tag }}!
