@@ -14,6 +14,7 @@ const (
 	DefaultRedisChannel = "events"
 	DefaultHTTPAddress  = ":9234"
 	DefaultMetricsPath  = "/metrics"
+	DefaultPrintVersion = false
 )
 
 type Options struct {
@@ -24,6 +25,7 @@ type Options struct {
 	HTTPAddress   string
 	MetricsPath   string
 	MetricsPrefix string
+	PrintVersion  bool
 }
 
 func (o *Options) loadFromEnv() error {
@@ -46,6 +48,7 @@ func (o *Options) loadFromArgs(args []string) error {
 		httpAddrName      = "http-addr"
 		metricsPrefixName = "metrics-prefix"
 		metricsPathName   = "metrics-path"
+		printVersionName  = "version"
 	)
 
 	fs := flag.NewFlagSet("prometheus-huey-exporter", flag.ExitOnError)
@@ -56,6 +59,7 @@ func (o *Options) loadFromArgs(args []string) error {
 	fs.String(httpAddrName, o.HTTPAddress, "HTTP address to listen")
 	fs.String(metricsPrefixName, o.MetricsPrefix, "prefix to apply to all metrics")
 	fs.String(metricsPathName, o.MetricsPath, "HTTP path for the metrics endpoint")
+	fs.Bool(printVersionName, o.PrintVersion, "print the version")
 
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -83,6 +87,9 @@ func (o *Options) loadFromArgs(args []string) error {
 
 		case metricsPathName:
 			o.MetricsPath = f.Value.String()
+
+		case printVersionName:
+			o.PrintVersion = f.Value.String() == "true"
 		}
 	})
 	return nil

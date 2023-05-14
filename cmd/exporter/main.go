@@ -16,11 +16,22 @@ import (
 	exporter "github.com/mcosta74/prometheus-huey-exporter"
 )
 
+var (
+	version = "0.0.0-dev"
+	commit  = ""
+	date    = ""
+)
+
 func main() {
 	// Load Program Options
 	opts, err := exporter.ParseOptions(os.Args[1:])
 	if err != nil {
 		fmt.Printf("error parsing options: %v\n", err)
+		os.Exit(1)
+	}
+
+	if opts.PrintVersion {
+		fmt.Printf("Version: %s, commit: %s, buildDate: %s\n", version, commit, date)
 		os.Exit(1)
 	}
 

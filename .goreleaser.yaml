@@ -43,7 +43,7 @@ changelog:
 release:
   mode: keep-existing
   header: |
-    ## Some title ({{ .Date }})
+    ## {{ .ProjectName }}
 
     Welcome to this new release!
 
