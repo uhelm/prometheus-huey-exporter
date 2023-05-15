@@ -31,7 +31,7 @@ func main() {
 	}
 
 	if opts.PrintVersion {
-		fmt.Printf("Version: %s, commit: %s, buildDate: %s\n", version, commit, date)
+		fmt.Println(version)
 		os.Exit(1)
 	}
 
