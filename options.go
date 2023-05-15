@@ -41,13 +41,13 @@ func (o *Options) loadFromEnv() error {
 
 func (o *Options) loadFromArgs(args []string) error {
 	var (
-		logLevelName      = "log-level"
-		logFormatName     = "log-format"
-		redisAddrName     = "redis-addr"
-		redisChannelName  = "redis-channel"
-		httpAddrName      = "http-addr"
-		metricsPrefixName = "metrics-prefix"
-		metricsPathName   = "metrics-path"
+		logLevelName      = "log.level"
+		logFormatName     = "log.format"
+		redisAddrName     = "redis.addr"
+		redisChannelName  = "redis.channel"
+		httpAddrName      = "http.addr"
+		metricsPrefixName = "metrics.prefix"
+		metricsPathName   = "metrics.path"
 		printVersionName  = "version"
 	)
 

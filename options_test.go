@@ -21,13 +21,13 @@ func TestParseOptions(t *testing.T) {
 	}
 
 	argsMap := map[string]string{
-		"-log-level":      "warn",
-		"-log-format":     "json",
-		"-redis-addr":     "redis.example.com:12345",
-		"-redis-channel":  "foo",
-		"-http-addr":      ":8081",
-		"-metrics-prefix": "/hello",
-		"-metrics-path":   "bar",
+		"-log.level":      "warn",
+		"-log.format":     "json",
+		"-redis.addr":     "redis.example.com:12345",
+		"-redis.channel":  "foo",
+		"-http.addr":      ":8081",
+		"-metrics.prefix": "/hello",
+		"-metrics.path":   "bar",
 	}
 
 	t.Run("default values", func(t *testing.T) {
@@ -87,13 +87,13 @@ func TestParseOptions(t *testing.T) {
 		}
 
 		want := exporter.Options{
-			LogLevel:      argsMap["-log-level"],
-			LogFormat:     argsMap["-log-format"],
-			RedisAddress:  argsMap["-redis-addr"],
-			RedisChannel:  argsMap["-redis-channel"],
-			HTTPAddress:   argsMap["-http-addr"],
-			MetricsPath:   argsMap["-metrics-path"],
-			MetricsPrefix: argsMap["-metrics-prefix"],
+			LogLevel:      argsMap["-log.level"],
+			LogFormat:     argsMap["-log.format"],
+			RedisAddress:  argsMap["-redis.addr"],
+			RedisChannel:  argsMap["-redis.channel"],
+			HTTPAddress:   argsMap["-http.addr"],
+			MetricsPath:   argsMap["-metrics.path"],
+			MetricsPrefix: argsMap["-metrics.prefix"],
 		}
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("ParseOptions() = %+v, want %+v", got, want)
@@ -103,7 +103,7 @@ func TestParseOptions(t *testing.T) {
 
 	t.Run("args override env", func(t *testing.T) {
 		os.Setenv("HUEY_EXPORTER_LOG_LEVEL", "info")
-		args := []string{"-log-level=error"}
+		args := []string{"-log.level=error"}
 
 		got, err := exporter.ParseOptions(args)
 		if err != nil {
