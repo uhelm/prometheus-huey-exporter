@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/exp/slog"
 )
@@ -33,31 +34,75 @@ func Test_eventHandler_HandleEvent(t *testing.T) {
 
 		msg := evtToMessage(evt)
 
+		want := testutil.ToFloat64(m.Executions.WithLabelValues(evt.TaskName)) + 1
+
 		_ = h.HandleEvent(msg)
+
+		got := testutil.ToFloat64(m.Executions.WithLabelValues(evt.TaskName))
+
+		if got != want {
+			t.Errorf("executing: want:%v, got:%v", want, got)
+		}
 	})
 
 	t.Run(string(completeEvent), func(t *testing.T) {
-		evt.Event = executingEvent
+		evt.Event = completeEvent
 
 		msg := evtToMessage(evt)
 
+		successWant := testutil.ToFloat64(m.Completed.WithLabelValues(evt.TaskName, "true")) + 1
+		failureWant := testutil.ToFloat64(m.Completed.WithLabelValues(evt.TaskName, "false"))
+
 		_ = h.HandleEvent(msg)
+
+		successGot := testutil.ToFloat64(m.Completed.WithLabelValues(evt.TaskName, "true"))
+		failureGot := testutil.ToFloat64(m.Completed.WithLabelValues(evt.TaskName, "false"))
+
+		if successGot != successWant {
+			t.Errorf("completed: successGot:%v, successWant:%v", successWant, successGot)
+		}
+
+		if failureGot != failureWant {
+			t.Errorf("completed: failureGot:%v, failureWant:%v", successWant, successGot)
+		}
 	})
 
 	t.Run(string(errorEvent), func(t *testing.T) {
-		evt.Event = executingEvent
+		evt.Event = errorEvent
 
 		msg := evtToMessage(evt)
 
+		successWant := testutil.ToFloat64(m.Completed.WithLabelValues(evt.TaskName, "true"))
+		failureWant := testutil.ToFloat64(m.Completed.WithLabelValues(evt.TaskName, "false")) + 1
+
 		_ = h.HandleEvent(msg)
+
+		successGot := testutil.ToFloat64(m.Completed.WithLabelValues(evt.TaskName, "true"))
+		failureGot := testutil.ToFloat64(m.Completed.WithLabelValues(evt.TaskName, "false"))
+
+		if successGot != successWant {
+			t.Errorf("completed: successGot:%v, successWant:%v", successWant, successGot)
+		}
+
+		if failureGot != failureWant {
+			t.Errorf("completed: failureGot:%v, failureWant:%v", successWant, successGot)
+		}
 	})
 
 	t.Run(string(lockedEvent), func(t *testing.T) {
-		evt.Event = executingEvent
+		evt.Event = lockedEvent
 
 		msg := evtToMessage(evt)
 
+		want := testutil.ToFloat64(m.Locked.WithLabelValues(evt.TaskName)) + 1
+
 		_ = h.HandleEvent(msg)
+
+		got := testutil.ToFloat64(m.Locked.WithLabelValues(evt.TaskName))
+
+		if got != want {
+			t.Errorf("executing: want:%v, got:%v", want, got)
+		}
 	})
 }
 
