@@ -1,8 +1,11 @@
 # prometheus-huey-exporter
 
 ![build](https://github.com/mcosta74/prometheus-huey-exporter/actions/workflows/build.yml/badge.svg)
+![GitHub](https://img.shields.io/github/license/mcosta74/prometheus-huey-exporter)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/mcosta74/prometheus-huey-exporter) [![Go Reference](https://pkg.go.dev/badge/github.com/mcosta74/prometheus-huey-exporter.svg)](https://pkg.go.dev/github.com/mcosta74/prometheus-huey-exporter)
 
 Expose metrics from the [huey](https://huey.readthedocs.io/en/latest/) task queue
+
 
 ## Usage
 
