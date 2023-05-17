@@ -9,10 +9,14 @@ import (
 	"golang.org/x/exp/slog"
 )
 
+// An EventHandler is responsible to handle all the messages received from
+// a [EventListener]
 type EventHandler interface {
 	HandleEvent(msg *redis.Message) error
 }
 
+// NewEventHandler creates and EventHandler that will handle the message
+// updating the metrics
 func NewEventHandler(metrics *Metrics, logger *slog.Logger) EventHandler {
 	eHandler := &eventHandler{
 		metrics:           metrics,
@@ -37,19 +41,19 @@ func (h *eventHandler) HandleEvent(msg *redis.Message) error {
 	}
 
 	switch evt.Event {
-	case Executing:
+	case executingEvent:
 		h.metrics.Executions.WithLabelValues(evt.TaskName).Inc()
 		h.startExecutionMap[evt.TaskId] = time.Now()
 
-	case Complete, Error:
-		labelValues := []string{evt.TaskName, fmt.Sprint(evt.Event == Complete)}
+	case completeEvent, errorEvent:
+		labelValues := []string{evt.TaskName, fmt.Sprint(evt.Event == completeEvent)}
 		h.metrics.Completed.WithLabelValues(labelValues...).Inc()
 		if startTime, ok := h.startExecutionMap[evt.TaskId]; ok {
 			h.metrics.Duration.WithLabelValues(labelValues...).Observe(time.Since(startTime).Seconds())
 			delete(h.startExecutionMap, evt.TaskId)
 		}
 
-	case Locked:
+	case lockedEvent:
 		h.metrics.Locked.WithLabelValues(evt.TaskName).Inc()
 	}
 	return nil
@@ -58,16 +62,16 @@ func (h *eventHandler) HandleEvent(msg *redis.Message) error {
 type eventType string
 
 const (
-	Canceled    eventType = "canceled"
-	Complete    eventType = "complete"
-	Error       eventType = "error"
-	Executing   eventType = "executing"
-	Expired     eventType = "expired"
-	Locked      eventType = "locked"
-	Retrying    eventType = "retrying"
-	Revoked     eventType = "revoked"
-	Scheduled   eventType = "scheduled"
-	Interrupted eventType = "interrupted"
+	canceledEvent    eventType = "canceled"
+	completeEvent    eventType = "complete"
+	errorEvent       eventType = "error"
+	executingEvent   eventType = "executing"
+	expiredEvent     eventType = "expired"
+	lockedEvent      eventType = "locked"
+	retryingEvent    eventType = "retrying"
+	revokedEvent     eventType = "revoked"
+	scheduledEvent   eventType = "scheduled"
+	interruptedEvent eventType = "interrupted"
 )
 
 type event struct {

@@ -2,11 +2,28 @@ package exporter
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	"golang.org/x/exp/slog"
 )
 
+const extraDoc = `
+This application can be configured also using environment variables
+
+  * HUEY_EXPORTER_LOG_LEVEL for the log level
+  * HUEY_EXPORTER_LOG_FORMAT for the log format
+  * HUEY_EXPORTER_REDIS_ADDR for the Redis instance address
+  * HUEY_EXPORTER_REDIS_CHANNEL for the Redis channel to subscribe to
+  * HUEY_EXPORTER_WEB_LISTEN_ADDRESS for the HTTP address to listen to
+  * HUEY_EXPORTER_METRICS_PATH for the metrics endpoint
+  * HUEY_EXPORTER_METRICS_PREFIX for the prefix to apply to all metrics
+
+Command line options have priority over the env variables
+
+`
+
+// Default values for configuration options
 const (
 	DefaultLogLevel     = slog.LevelInfo
 	DefaultLogFormat    = "text"
@@ -17,6 +34,7 @@ const (
 	DefaultPrintVersion = false
 )
 
+// Option contains all the configuration parameters
 type Options struct {
 	LogLevel      string
 	LogFormat     string
@@ -60,6 +78,12 @@ func (o *Options) loadFromArgs(args []string) error {
 	fs.String(metricsPrefixName, o.MetricsPrefix, "prefix to apply to all metrics")
 	fs.String(metricsPathName, o.MetricsPath, "HTTP path for the metrics endpoint")
 	fs.Bool(printVersionName, o.PrintVersion, "print the version")
+	fs.Usage = func() {
+		fmt.Fprintf(fs.Output(), "Usage of %s\n", fs.Name())
+		fmt.Fprint(fs.Output(), extraDoc)
+		fmt.Fprintln(fs.Output(), "Options:")
+		fs.PrintDefaults()
+	}
 
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -95,6 +119,8 @@ func (o *Options) loadFromArgs(args []string) error {
 	return nil
 }
 
+// ParseOptions reads configuration parameters from environment variables
+// and then command line parameters args
 func ParseOptions(args []string) (Options, error) {
 	opts := Options{
 		LogLevel:     DefaultLogLevel.String(),

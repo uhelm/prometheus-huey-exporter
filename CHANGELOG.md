@@ -9,12 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- instructions on how to configure Huey2
+- package godoc
+  
 ### Fixed
 
 ### Changed
 
 - print only version with `--version`
 - use dot notation for flags family
+- add more UTs
   
 ### Removed
 

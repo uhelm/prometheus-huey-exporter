@@ -7,6 +7,8 @@ import (
 	"golang.org/x/exp/slog"
 )
 
+// EventListener interface exposes a single method Run() that shall run until the
+// input context does not get canceled
 type EventListener interface {
 	Run(ctx context.Context) error
 }
@@ -18,6 +20,9 @@ type listener struct {
 	handler EventHandler
 }
 
+// NewEventListener creates and returns a new [EventListener].
+// The created listeners uses the rdb connection to subscribe to the channel
+// and forwards all the received messages to the handler
 func NewEventListener(rdb *redis.Client, channel string, logger *slog.Logger, handler EventHandler) EventListener {
 	return &listener{
 		rdb:     rdb,

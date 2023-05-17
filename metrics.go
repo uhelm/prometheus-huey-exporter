@@ -2,6 +2,7 @@ package exporter
 
 import "github.com/prometheus/client_golang/prometheus"
 
+// Metrics stores all the metrics exposed by the exporter
 type Metrics struct {
 	Executions *prometheus.CounterVec
 	Completed  *prometheus.CounterVec
@@ -9,6 +10,8 @@ type Metrics struct {
 	Duration   *prometheus.HistogramVec
 }
 
+// SetupMetrics takes care of initializing all the metrics (the names are prefixed
+// with prefix) and register them to the default Registerer
 func SetupMetrics(prefix string) *Metrics {
 	m := &Metrics{
 		Executions: prometheus.NewCounterVec(prometheus.CounterOpts{

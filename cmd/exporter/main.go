@@ -1,3 +1,6 @@
+/*
+The prometheus-nats-exporter exposes metrics about Huey2 tasks executions
+*/
 package main
 
 import (
