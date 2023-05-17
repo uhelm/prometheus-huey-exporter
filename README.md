@@ -1,5 +1,7 @@
 # prometheus-huey-exporter
 
+![build](https://github.com/mcosta74/prometheus-huey-exporter/actions/workflows/build.yml/badge.svg)
+
 Expose metrics from the [huey](https://huey.readthedocs.io/en/latest/) task queue
 
 ## Usage
