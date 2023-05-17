@@ -13,11 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Removed
+
+## [0.3.0] - 2023-05-17
+
+### Changed
+
 - upgrade dependency (slog)
 - set version in dev mode
   
-### Removed
-
 ## [0.2.2] - 2023-05-17
 
 ### Changed
