@@ -10,11 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Fixed
-
+  
 ### Changed
 
 ### Removed
 
+## [0.3.1] - 2023-05-18
+
+### Fixed
+- wrong handling of -log.format
+- wrong source in log messages
+  
 ## [0.3.0] - 2023-05-17
 
 ### Changed
