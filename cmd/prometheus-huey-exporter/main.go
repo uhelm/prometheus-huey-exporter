@@ -106,9 +106,12 @@ func getLogger(opts exporter.Options) *slog.Logger {
 		ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
 			switch a.Key {
 			case slog.SourceKey:
-				a.Value = slog.StringValue(filepath.Base(a.Value.String()))
+				// use only filename for source
+				source := a.Value.Any().(*slog.Source)
+				source.File = filepath.Base(source.File)
 
 			case slog.TimeKey:
+				// Use UTC time for timestamp
 				a.Value = slog.TimeValue(a.Value.Time().UTC())
 			}
 			return a
