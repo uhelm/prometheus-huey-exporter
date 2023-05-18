@@ -14,7 +14,7 @@ Expose metrics from the [huey](https://huey.readthedocs.io/en/latest/) task queu
 Create a custom [signal](https://huey.readthedocs.io/en/latest/signals.html) handler that catch all the signals and publish on a specific Redis channel
 
 ```py
-@djhuey.signal()
+@huey.signal()
 def metrics(signal, task, exc=None):
     # conn = djhuey.HUEY.storage.conn
     conn = get_redis_connection()
