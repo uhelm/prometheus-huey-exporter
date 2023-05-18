@@ -115,7 +115,7 @@ func getLogger(opts exporter.Options) *slog.Logger {
 		},
 	}
 
-	var handler slog.Handler = slog.NewJSONHandler(os.Stderr, &hOpts)
+	var handler slog.Handler = slog.NewTextHandler(os.Stderr, &hOpts)
 	if opts.LogFormat == "json" {
 		handler = slog.NewJSONHandler(os.Stderr, &hOpts)
 	}
