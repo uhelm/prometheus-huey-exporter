@@ -63,7 +63,7 @@ func (o *Options) loadFromArgs(args []string) error {
 		logFormatName     = "log.format"
 		redisAddrName     = "redis.addr"
 		redisChannelName  = "redis.channel"
-		httpAddrName      = "http.addr"
+		httpAddrName      = "web.listen"
 		metricsPrefixName = "metrics.prefix"
 		metricsPathName   = "metrics.path"
 		printVersionName  = "version"

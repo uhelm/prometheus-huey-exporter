@@ -25,7 +25,7 @@ func TestParseOptions(t *testing.T) {
 		"-log.format":     "json",
 		"-redis.addr":     "redis.example.com:12345",
 		"-redis.channel":  "foo",
-		"-http.addr":      ":8081",
+		"-web.listen":     ":8081",
 		"-metrics.prefix": "/hello",
 		"-metrics.path":   "bar",
 	}
@@ -91,7 +91,7 @@ func TestParseOptions(t *testing.T) {
 			LogFormat:     argsMap["-log.format"],
 			RedisAddress:  argsMap["-redis.addr"],
 			RedisChannel:  argsMap["-redis.channel"],
-			HTTPAddress:   argsMap["-http.addr"],
+			HTTPAddress:   argsMap["-web.listen"],
 			MetricsPath:   argsMap["-metrics.path"],
 			MetricsPrefix: argsMap["-metrics.prefix"],
 		}
