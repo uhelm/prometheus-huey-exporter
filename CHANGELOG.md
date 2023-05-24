@@ -12,9 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
   
 ### Changed
-- use `-web.listen` to be more similar to other Go exporters
 
 ### Removed
+
+## [0.4.0] - 2023-05-24
+
+### Added
+- documentation about configuration params
+
+### Changed
+- made name of parameters similar to other exporters
+- simplified project layout
 
 ## [0.3.1] - 2023-05-18
 
