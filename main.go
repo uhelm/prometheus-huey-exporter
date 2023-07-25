@@ -30,11 +30,11 @@ var (
 	fs               = flag.NewFlagSet("prometheus-huey-exporter", flag.ExitOnError)
 	logLevel         = fs.String("log.level", getEnvString("HUEY_EXPORTER_LOG_LEVEL", slog.LevelInfo.String()), "Log level (debug, info, warn, error)")
 	logFormat        = fs.String("log.format", getEnvString("HUEY_EXPORTER_LOG_FORMAT", "text"), "Log format (text, json)")
-	redisAddr        = fs.String("redis.addr", getEnvString("HUEY_EXPORTER_REDIS_ADDR", "localhost:6379"), "Address of the Redis instance to connect to")
+	redisAddr        = fs.String("redis.address", getEnvString("HUEY_EXPORTER_REDIS_ADDR", "localhost:6379"), "Address of the Redis instance to connect to")
 	redisChannel     = fs.String("redis.channel", getEnvString("HUEY_EXPORTER_REDIS_CHANNEL", "events"), "Redis channel to subscribe to listen for events")
 	metricsNamespace = fs.String("metrics.namespace", getEnvString("HUEY_EXPORTER_METRICS_NAMESPACE", ""), "Namespace for metrics")
 	webPath          = fs.String("web.telemetry-path", getEnvString("HUEY_EXPORTER_WEB_PATH", "/metrics"), "Path under which to expose metrics")
-	webListenAddr    = fs.String("web.listen-addr", getEnvString("HUEY_EXPORTER_WEB_LISTEN_ADDRESS", ":9234"), "Address to listen on for web interface and telemetry")
+	webListenAddr    = fs.String("web.listen-address", getEnvString("HUEY_EXPORTER_WEB_LISTEN_ADDRESS", ":9234"), "Address to listen on for web interface and telemetry")
 	showVersion      = fs.Bool("version", false, "Show version information")
 )
 

@@ -43,11 +43,11 @@ Start the exporter passing the same `channel_name` used in the python code
 | --------------------- | ---------------------------------- | ---------------------------------------------------- |
 | `-log.level`          | `HUEY_EXPORTER_LOG_LEVEL`          | Log level                                            |
 | `-log.format`         | `HUEY_EXPORTER_LOG_FORMAT`         | Log format                                           |
-| `-redis.addr`         | `HUEY_EXPORTER_REDIS_ADDR`         | Address of the Redis instance to connect to          |
+| `-redis.address`      | `HUEY_EXPORTER_REDIS_ADDR`         | Address of the Redis instance to connect to          |
 | `-redis.channel`      | `HUEY_EXPORTER_REDIS_CHANNEL`      | Redis channel to subscribe to listen for events      |
 | `-metrics.namespace`  | `HUEY_EXPORTER_METRICS_NAMESPACE`  | Namespace for metrics                                |
 | `-web.telemetry-path` | `HUEY_EXPORTER_WEB_PATH`           | Path under which to expose metrics                   |
-| `-web.listen-addr`    | `HUEY_EXPORTER_WEB_LISTEN_ADDRESS` | Address to listen on for web interface and telemetry |
+| `-web.listen-address` | `HUEY_EXPORTER_WEB_LISTEN_ADDRESS` | Address to listen on for web interface and telemetry |
 
 ### Other Flags
 | Flag Name  | Description               |
