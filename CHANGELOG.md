@@ -8,14 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- new metric about last task execution duration
 
 ### Fixed
   
 ### Changed
-- change the flags name to respect other exporters naming
 
 ### Removed
+
+## [0.5.0] - 2023-07-27
+
+### Added
+- new metric about last task execution duration
+
+### Changed
+- change the flags name to respect other exporters naming
 
 ## [0.4.0] - 2023-05-24
 
