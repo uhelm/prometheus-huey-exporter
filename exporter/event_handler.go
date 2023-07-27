@@ -49,7 +49,9 @@ func (h *eventHandler) HandleEvent(msg *redis.Message) error {
 		labelValues := []string{evt.TaskName, fmt.Sprint(evt.Event == completeEvent)}
 		h.metrics.Completed.WithLabelValues(labelValues...).Inc()
 		if startTime, ok := h.startExecutionMap[evt.TaskId]; ok {
-			h.metrics.Duration.WithLabelValues(labelValues...).Observe(time.Since(startTime).Seconds())
+			duration := time.Since(startTime).Seconds()
+			h.metrics.Duration.WithLabelValues(labelValues...).Observe(duration)
+			h.metrics.LastDuration.WithLabelValues(labelValues...).Set(duration)
 			delete(h.startExecutionMap, evt.TaskId)
 		}
 

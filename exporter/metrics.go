@@ -4,10 +4,11 @@ import "github.com/prometheus/client_golang/prometheus"
 
 // Metrics stores all the metrics exposed by the exporter
 type Metrics struct {
-	Executions *prometheus.CounterVec
-	Completed  *prometheus.CounterVec
-	Locked     *prometheus.CounterVec
-	Duration   *prometheus.HistogramVec
+	Executions   *prometheus.CounterVec
+	Completed    *prometheus.CounterVec
+	Locked       *prometheus.CounterVec
+	Duration     *prometheus.HistogramVec
+	LastDuration *prometheus.GaugeVec
 }
 
 // SetupMetrics takes care of initializing all the metrics (the names are prefixed
@@ -38,11 +39,18 @@ func SetupMetrics(prefix string) *Metrics {
 			Name:      "task_duration_seconds",
 			Help:      "Task duration in seconds.",
 		}, []string{"task_name", "success"}),
+		LastDuration: prometheus.NewGaugeVec(prometheus.GaugeOpts{
+			Namespace: prefix,
+			Subsystem: "scheduler",
+			Name:      "last_task_duration_seconds",
+			Help:      "Last task duration in seconds.",
+		}, []string{"task_name", "success"}),
 	}
 
 	prometheus.MustRegister(m.Executions)
 	prometheus.MustRegister(m.Completed)
 	prometheus.MustRegister(m.Locked)
 	prometheus.MustRegister(m.Duration)
+	prometheus.MustRegister(m.LastDuration)
 	return m
 }
