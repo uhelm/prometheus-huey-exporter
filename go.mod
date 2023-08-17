@@ -1,13 +1,12 @@
 module github.com/mcosta74/prometheus-huey-exporter
 
-go 1.20
+go 1.21
 
 require (
 	github.com/alicebob/miniredis/v2 v2.30.2
 	github.com/oklog/run v1.1.0
 	github.com/prometheus/client_golang v1.15.1
 	github.com/redis/go-redis/v9 v9.0.4
-	golang.org/x/exp v0.0.0-20230515195305-f3d0a9c9a5cc
 )
 
 require (

@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"time"
 
+	"log/slog"
+
 	"github.com/redis/go-redis/v9"
-	"golang.org/x/exp/slog"
 )
 
 // An EventHandler is responsible to handle all the messages received from

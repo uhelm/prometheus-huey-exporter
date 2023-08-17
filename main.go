@@ -13,9 +13,10 @@ import (
 	"path/filepath"
 	"syscall"
 
+	"log/slog"
+
 	"github.com/oklog/run"
 	"github.com/redis/go-redis/v9"
-	"golang.org/x/exp/slog"
 
 	"github.com/mcosta74/prometheus-huey-exporter/exporter"
 )

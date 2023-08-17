@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
+	"log/slog"
+
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/redis/go-redis/v9"
-	"golang.org/x/exp/slog"
 )
 
 func Test_eventHandler_HandleEvent(t *testing.T) {

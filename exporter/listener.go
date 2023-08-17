@@ -3,8 +3,9 @@ package exporter
 import (
 	"context"
 
+	"log/slog"
+
 	"github.com/redis/go-redis/v9"
-	"golang.org/x/exp/slog"
 )
 
 // EventListener interface exposes a single method Run() that shall run until the
