@@ -42,26 +42,25 @@ func (h *eventHandler) HandleEvent(msg *redis.Message) error {
 	}
 
 	switch evt.Event {
-	case executingEvent:
-		h.metrics.Executions.WithLabelValues(evt.TaskName).Inc()
-		h.startExecutionMap[evt.TaskId] = time.Now()
-
-	case completeEvent, errorEvent:
-		labelValues := []string{evt.TaskName, fmt.Sprint(evt.Event == completeEvent)}
-		h.metrics.Completed.WithLabelValues(labelValues...).Inc()
-		if startTime, ok := h.startExecutionMap[evt.TaskId]; ok {
-			duration := time.Since(startTime).Seconds()
-			h.metrics.Duration.WithLabelValues(labelValues...).Observe(duration)
-			h.metrics.LastDuration.WithLabelValues(labelValues...).Set(duration)
-			delete(h.startExecutionMap, evt.TaskId)
-		}
-
-	case lockedEvent:
-		h.metrics.Locked.WithLabelValues(evt.TaskName).Inc()
-	}
-
-	case canceledEvent:
-		h.metrics.Canceled.WithLabelValues(evt.TaskName).Inc()
+		case executingEvent:
+			h.metrics.Executions.WithLabelValues(evt.TaskName).Inc()
+			h.startExecutionMap[evt.TaskId] = time.Now()
+	
+		case completeEvent, errorEvent:
+			labelValues := []string{evt.TaskName, fmt.Sprint(evt.Event == completeEvent)}
+			h.metrics.Completed.WithLabelValues(labelValues...).Inc()
+			if startTime, ok := h.startExecutionMap[evt.TaskId]; ok {
+				duration := time.Since(startTime).Seconds()
+				h.metrics.Duration.WithLabelValues(labelValues...).Observe(duration)
+				h.metrics.LastDuration.WithLabelValues(labelValues...).Set(duration)
+				delete(h.startExecutionMap, evt.TaskId)
+			}
+	
+		case lockedEvent:
+			h.metrics.Locked.WithLabelValues(evt.TaskName).Inc()
+	
+		case canceledEvent:
+			h.metrics.Canceled.WithLabelValues(evt.TaskName).Inc()
 	}
 
 	return nil
