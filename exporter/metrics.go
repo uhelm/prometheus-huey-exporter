@@ -5,6 +5,7 @@ import "github.com/prometheus/client_golang/prometheus"
 // Metrics stores all the metrics exposed by the exporter
 type Metrics struct {
 	Executions   *prometheus.CounterVec
+	Canceled     *prometheus.CounterVec
 	Completed    *prometheus.CounterVec
 	Locked       *prometheus.CounterVec
 	Duration     *prometheus.HistogramVec
@@ -20,6 +21,12 @@ func SetupMetrics(prefix string) *Metrics {
 			Subsystem: "scheduler",
 			Name:      "task_execution_total",
 			Help:      "The Number of times a scheduler task has been executed.",
+		}, []string{"task_name"}),
+		Canceled: prometheus.NewCounterVec(prometheus.CounterOpts{
+			Namespace: prefix,
+			Subsystem: "scheduler",
+			Name:      "task_canceled_total",
+			Help:      "The Number of times a scheduler task has been canceled.",
 		}, []string{"task_name"}),
 		Completed: prometheus.NewCounterVec(prometheus.CounterOpts{
 			Namespace: prefix,
@@ -48,6 +55,7 @@ func SetupMetrics(prefix string) *Metrics {
 	}
 
 	prometheus.MustRegister(m.Executions)
+	prometheus.MustRegister(m.Canceled)
 	prometheus.MustRegister(m.Completed)
 	prometheus.MustRegister(m.Locked)
 	prometheus.MustRegister(m.Duration)
