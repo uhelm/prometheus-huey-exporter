@@ -58,6 +58,9 @@ func (h *eventHandler) HandleEvent(msg *redis.Message) error {
 
 	case lockedEvent:
 		h.metrics.Locked.WithLabelValues(evt.TaskName).Inc()
+
+	case canceledEvent:
+		h.metrics.Canceled.WithLabelValues(evt.TaskName).Inc()
 	}
 	return nil
 }
