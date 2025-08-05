@@ -46,7 +46,7 @@ func (h *eventHandler) HandleEvent(msg *redis.Message) error {
 		h.metrics.Executions.WithLabelValues(evt.TaskName).Inc()
 		h.startExecutionMap[evt.TaskId] = time.Now()
 
-	case completeEvent, errorEvent, canceledEvent:
+	case completeEvent, errorEvent:
 		labelValues := []string{evt.TaskName, fmt.Sprint(evt.Event == completeEvent)}
 		h.metrics.Completed.WithLabelValues(labelValues...).Inc()
 		if startTime, ok := h.startExecutionMap[evt.TaskId]; ok {
@@ -59,6 +59,11 @@ func (h *eventHandler) HandleEvent(msg *redis.Message) error {
 	case lockedEvent:
 		h.metrics.Locked.WithLabelValues(evt.TaskName).Inc()
 	}
+
+	case canceledEvent:
+		h.metrics.Canceled.WithLabelValues(evt.TaskName).Inc()
+	}
+
 	return nil
 }
 
