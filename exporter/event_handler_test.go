@@ -105,6 +105,23 @@ func Test_eventHandler_HandleEvent(t *testing.T) {
 			t.Errorf("executing: want:%v, got:%v", want, got)
 		}
 	})
+
+	t.Run(string(canceledEvent), func(t *testing.T) {
+		evt.Event = canceledEvent
+
+		msg := evtToMessage(evt)
+
+		want := testutil.ToFloat64(m.Canceled.WithLabelValues(evt.TaskName)) + 1
+
+		_ = h.HandleEvent(msg)
+
+		got := testutil.ToFloat64(m.Canceled.WithLabelValues(evt.TaskName))
+
+		if got != want {
+			t.Errorf("executing: want:%v, got:%v", want, got)
+		}
+	})
+
 }
 
 func evtToMessage(evt event) *redis.Message {
